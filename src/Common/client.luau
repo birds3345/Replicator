@@ -19,12 +19,16 @@ function client.init()
 			stateMap.bind(state)
 
 		elseif action == "Set" then
+			if not stateMap.exists(name) then return end
+
 			local path: string, value: any = ...
 
 			local state = stateMap.get(name)
 			state:_setImpl(path, value)
 
 		elseif action == "Destroy" then
+			if not stateMap.exists(name) then return end
+
 			stateMap.get(name).destroyed:fire()
 			stateMap.unbind(name)
 

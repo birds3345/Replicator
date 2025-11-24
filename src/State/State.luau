@@ -7,7 +7,6 @@ local Signal = require(script.Parent.Parent.Common.Signal)
 
 local server = require(script.Parent.Parent.Common.server)
 local types = require(script.Parent.Parent.types)
-local stateMap = require(script.Parent.stateMap)
 
 type State = types.State
 
@@ -151,6 +150,11 @@ function State.destroy(self: State)
 	assert(runContext == "server", "State:destroy can only be called on the server")
 
 	server.sendEvent(self, nil, "Destroy")
+
+	if self._playerAddedConnection then
+		self._playerAddedConnection:Disconnect()
+		self._playerAddedConnection = nil
+	end
 
 	self.destroyed:fire()
 end
